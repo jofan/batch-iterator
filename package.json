@@ -1,0 +1,23 @@
+{
+  "name": "batch-iterator",
+  "version": "1.0.0",
+  "description": "Batch iterator using promises",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jofan/batch-iterator.git"
+  },
+  "keywords": [
+    "batch",
+    "iterator"
+  ],
+  "author": "Stefan Liden",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jofan/batch-iterator/issues"
+  },
+  "homepage": "https://github.com/jofan/batch-iterator#readme"
+}
