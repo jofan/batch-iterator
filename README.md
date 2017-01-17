@@ -34,7 +34,6 @@ const startTime = Date.now();
 
 iterator(urls, 10, function(url) {
        var pageres = new Pageres();
-       screenshots.push(screenshotDestination);
        // Return the pageres promise
        return pageres
            .src(url, ['1024x768'])
