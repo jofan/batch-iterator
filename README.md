@@ -1,6 +1,8 @@
 # batch-iterator
 JavaScript batch iterator using promises.
 
+Useful when you need to throttle how many concurrent processes are running simultaneously, while being notified when they're all done (or something fails).
+
 ## Installation
 
 ```
