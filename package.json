@@ -1,10 +1,10 @@
 {
   "name": "batch-iterator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Batch iterator using promises",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/tape/bin/tape \"test/**/*_test.js\" | tap-min"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/jofan/batch-iterator/issues"
   },
-  "homepage": "https://github.com/jofan/batch-iterator#readme"
+  "homepage": "https://github.com/jofan/batch-iterator#readme",
+  "devDependencies": {
+    "tap-min": "^1.1.0",
+    "tape": "^4.6.3"
+  }
 }

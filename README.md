@@ -1,5 +1,5 @@
 # batch-iterator
-JavaScript batch iterator using promises
+JavaScript batch iterator using promises.
 
 ## Installation
 
@@ -12,5 +12,41 @@ npm install batch-iterator --save
 ```
 var iterator = require('batch-iterator');
 
-iterator(list, batchSize, callback);
+iterator(list, batchSize, promise);
+```
+
+The **list** will be iterated, and each item in the list will be passed on to
+the **promise** callback.
+
+**batchSize** is how many items in the list should be started simultaneously.
+Default size is 10.
+
+## Example
+In the example below we use the [Pageres module](https://github.com/sindresorhus/pageres)
+to capture 100 screenshots in batches of 10.
+
+```
+const Pageres = require('pageres');
+const iterator = require('batch-iterator');
+const urls = ["https://github.io", ..., ]; // imagine 100 urls
+
+const startTime = Date.now();
+
+iterator(urls, 10, function(url) {
+       var pageres = new Pageres();
+       screenshots.push(screenshotDestination);
+       // Return the pageres promise
+       return pageres
+           .src(url, ['1024x768'])
+           .dest(process.cwd() + '/screenshots')
+           .run();
+   })
+   .then(function() {
+     const endTime = Date.now();
+     const diffTime = (endTime - startTime) / 1000;
+     console.log("Screenshots captured in " + diffTime + " seconds.");
+   })
+   .catch(function(err) {
+     console.log(err);
+   });
 ```
