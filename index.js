@@ -1,5 +1,6 @@
 "use strict";
 
+
 function getIterator(iterations) {
     var iterator = [];
     for(var i=iterations;i>0;i--) {
@@ -8,23 +9,24 @@ function getIterator(iterations) {
     return iterator;
 }
 
-function batchJob(batch, nr, cb) {
+function batchJob(batch, nr, accumulator, cb) {
     return new Promise(function(resolve, reject) {
         var ln = batch.length;
         var count = 0;
         // console.log('Beginning batch nr ', nr);
         batch.forEach(function(item) {
             cb(item)
-              .then(function() {
+              .then(function(data) {
                   count += 1;
+                  if (data) accumulator.push(data);
                   // console.log(count, ln);
                   if (count === ln) {
                       // console.log('Batch ' + nr + ' done');
-                      resolve(); // Next batch will begin
+                      resolve(accumulator); // Next batch will begin
                   }
               })
               .catch(function(err) {
-                reject(err);
+                  reject(err, accumulator);
               });
         });
     });
@@ -33,6 +35,8 @@ function batchJob(batch, nr, cb) {
 // Iterate an array in batches
 module.exports = function iterate(arr, batchSize, cb) {
     var list = arr.slice(0, arr.length);
+    // Will collect everything resolved
+    var result = [];
     return new Promise(function(resolve, reject) {
       if (!arr.length) {
         reject('batch-iterator: Nothing to iterate');
@@ -48,14 +52,14 @@ module.exports = function iterate(arr, batchSize, cb) {
             // Add these actions to the end of the sequence
             sequence = sequence
               .then(function() {
-                  return batchJob(batch, index, cb)
-                    .then(function() {
+                  return batchJob(batch, index, result, cb)
+                    .then(function(accumulator) {
                         if (index === iterations.length - 1) {
-                            resolve(); // All batches are done
+                            resolve(accumulator); // All batches are done
                         }
                     })
-                    .catch(function(err) {
-                      reject(err);
+                      .catch(function(err, accumulator) {
+                          reject(err, accumulator);
                     });
               })
               .catch(function(err) {

@@ -14,7 +14,13 @@ npm install batch-iterator --save
 ```
 var iterator = require('batch-iterator');
 
-iterator(list, batchSize, promise);
+iterator(list, batchSize, promise)
+  .then(function(accumulator) {
+    console.log('List of result from promise', accumulator);
+  })
+  .catch(function(err) {
+    console.log("A promise failed", err);
+  });
 ```
 
 The **list** will be iterated, and each item in the list will be passed on to
@@ -22,6 +28,8 @@ the **promise** callback.
 
 **batchSize** is how many items in the list should be started simultaneously.
 Default size is 10.
+
+The **accumulator** is a list of the data resolved in each promise.
 
 ## Example
 In the example below we use the [Pageres module](https://github.com/sindresorhus/pageres)

@@ -18,7 +18,7 @@ function countIterations(item) {
     // setTimeout(function() {
       // process.stdout.write('.');
       counter += 1;
-      resolve();
+      resolve(counter);
     // }, Math.floor(Math.random() * (1000 - 100)) + 100);
   });
 }
@@ -58,8 +58,22 @@ test('batch fail', function(t) {
 
 test('empty list', function(t) {
   t.plan(1);
+  counter = 0;
   iterator([], 2, countIterations)
   .catch(function(err) {
     t.equal(err, "batch-iterator: Nothing to iterate");
   });
+});
+
+test('resolved data', function(t) {
+    t.plan(1);
+    counter = 0;
+    iterator(list, 2, countIterations)
+        .then(function(data) {
+            t.deepEqual(data, [1,2,3,4,5,6,7,8,9,10]);
+        })
+        .catch(function(err) {
+            console.log(err);
+            t.error(err);
+        });
 });
