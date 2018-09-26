@@ -9,13 +9,13 @@ function getIterator(iterations) {
     return iterator;
 }
 
-function batchJob(batch, nr, accumulator, cb) {
+function batchJob(batch, nr, accumulator, extraData, cb) {
     return new Promise(function(resolve, reject) {
         var ln = batch.length;
         var count = 0;
         // console.log('Beginning batch nr ', nr);
         batch.forEach(function(item) {
-            cb(item)
+            cb(item, extraData)
               .then(function(data) {
                   count += 1;
                   if (data) accumulator.push(data);
@@ -33,7 +33,7 @@ function batchJob(batch, nr, accumulator, cb) {
 }
 
 // Iterate an array in batches
-module.exports = function iterate(arr, batchSize, cb) {
+module.exports = function iterate(arr, batchSize, extraData, cb) {
     var list = arr.slice(0, arr.length);
     // Will collect everything resolved
     var result = [];
@@ -52,7 +52,7 @@ module.exports = function iterate(arr, batchSize, cb) {
             // Add these actions to the end of the sequence
             sequence = sequence
               .then(function() {
-                  return batchJob(batch, index, result, cb)
+                  return batchJob(batch, index, result, extraData, cb)
                     .then(function(accumulator) {
                         if (index === iterations.length - 1) {
                             resolve(accumulator); // All batches are done
