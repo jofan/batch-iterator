@@ -14,7 +14,7 @@ npm install batch-iterator --save
 ```
 var iterator = require('batch-iterator');
 
-iterator(list, batchSize, promise)
+iterator(list, batchSize, promise, data)
   .then(function(accumulator) {
     console.log('List of result from promise', accumulator);
   })
@@ -30,6 +30,8 @@ the **promise** callback.
 Default size is 10.
 
 The **accumulator** is a list of the data resolved in each promise.
+
+The **data** will be passed to each function as additional data.
 
 ## Example
 In the example below we use the [Pageres module](https://github.com/sindresorhus/pageres)
