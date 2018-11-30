@@ -37,7 +37,7 @@ function countIterations2(item) {
 
 test('batch run', function(t) {
   t.plan(1);
-  iterator(list, 2, null, countIterations)
+  iterator(list, 2, countIterations)
     .then(function() {
       // console.log('Batch done!');
       t.equal(counter, 10);
@@ -48,7 +48,7 @@ test('batch run', function(t) {
 test('batch fail', function(t) {
   t.plan(1);
   counter = 0;
-  iterator(list, 2, null, countIterations2)
+  iterator(list, 2, countIterations2)
     .catch(function(err) {
       // console.log(err);
       t.equal(err, "Failed iteration");
@@ -68,7 +68,7 @@ test('empty list', function(t) {
 test('resolved data', function(t) {
   t.plan(1);
   counter = 0;
-  iterator(list, 2, null, countIterations)
+  iterator(list, 2, countIterations)
     .then(function(data) {
       t.deepEqual(data, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     })
@@ -84,7 +84,7 @@ test('extra data', function(t) {
   const extra = {
     id: 2
   };
-  iterator(list, 2, extra, countIterations)
+  iterator(list, 2, countIterations, extra)
     .then(function(data) {
       t.deepEqual(data, [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]);
     })
