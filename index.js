@@ -8,16 +8,20 @@ function getIterator(iterations) {
   return iterator;
 }
 
-function batchJob(batch, nr, accumulator, data, cb) {
+function batchJob(batchSize, batch, nr, accumulator, data, cb) {
   return new Promise(function(resolve, reject) {
     var ln = batch.length;
     var count = 0;
     // console.log('Beginning batch nr ', nr);
-    batch.forEach(function(item) {
+    batch.forEach(function(item, index) {
       cb(item, data)
-        .then(function(res) {
+        .then(function(res = null) {
           count += 1;
-          if (res) accumulator.push(res);
+          const resIndex = (batchSize * nr) + index;
+          accumulator.push({
+            res,
+            resIndex,
+          })
           // console.log(count, ln);
           if (count === ln) {
             // console.log('Batch ' + nr + ' done');
@@ -50,10 +54,15 @@ module.exports = function iterate(arr, batchSize, cb, data) {
         // Add these actions to the end of the sequence
         sequence = sequence
           .then(function() {
-            return batchJob(batch, index, result, data, cb)
+            return batchJob(batchSize, batch, index, result, data, cb)
               .then(function(accumulator) {
                 if (index === iterations.length - 1) {
-                  resolve(accumulator); // All batches are done
+                  // order by the original order
+                  const resArray = new Array(arr.length);
+                  accumulator.forEach(function(i) {
+                    resArray[i.resIndex] = i.res;
+                  });
+                  resolve(resArray); // All batches are done
                 }
               })
               .catch(function(err, accumulator) {
