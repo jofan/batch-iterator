@@ -1,6 +1,6 @@
 {
   "name": "batch-iterator",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Batch iterator using promises",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/jofan/batch-iterator#readme",
   "devDependencies": {
-    "tap-min": "^1.1.0",
-    "tape": "^4.6.3"
+    "tap-min": "^2.0.0",
+    "tape": "^5.0.1"
   }
 }
