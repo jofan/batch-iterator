@@ -9,6 +9,11 @@ for (var t = 10; t > 0; t--) {
   list.push('Item ' + t);
 }
 
+const intList = [];
+for (var t = 10; t > 0; t--) {
+  intList.push(t);
+}
+
 var counter = 0;
 
 // Promise to run
@@ -32,6 +37,19 @@ function countIterations2(item) {
     } else {
       resolve();
     }
+  });
+}
+
+const withoutOrdering = [];
+function randomizedResponse(item) {
+  const delays = [10, 20, 30]
+  const delay = item * delays[Math.floor(Math.random() * delays.length)];
+
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      withoutOrdering.push(item);
+      resolve(item);
+    }, delay)
   });
 }
 
@@ -87,6 +105,22 @@ test('extra data', function(t) {
   iterator(list, 2, countIterations, extra)
     .then(function(data) {
       t.deepEqual(data, [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]);
+    })
+    .catch(function(err) {
+      t.error(err);
+    });
+});
+
+test('ordered response', function(t) {
+  t.plan(1);
+  counter = 0;
+  const extra = {
+    id: 2
+  };
+  iterator(intList, 5, randomizedResponse, extra)
+    .then(function(data) {
+      // console.log(' Without ordering: ', withoutOrdering);
+      t.deepEqual(data, [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
     })
     .catch(function(err) {
       t.error(err);
