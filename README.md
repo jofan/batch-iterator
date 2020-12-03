@@ -35,6 +35,8 @@ The **accumulator** is a list of the data resolved in each promise.
 
 The **data** will be passed to each function as additional data.
 
+The **index** of the array item is accessible as the LAST parameter of the passed function. (also afte 'data', if present)
+
 ## Example
 In the example below we use the [Pageres module](https://github.com/sindresorhus/pageres)
 to capture 100 screenshots in batches of 10.
