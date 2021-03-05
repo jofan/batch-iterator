@@ -14,13 +14,20 @@ function batchJob(batchSize, batch, nr, accumulator, data, cb) {
     var count = 0;
     // console.log('Beginning batch nr ', nr);
     batch.forEach(function(item, index) {
-      cb(item, data)
+      const arrIndex = (batchSize * nr) + index;
+      let newCb;
+      if (!data) {
+        newCb = cb.bind(this, item, arrIndex);
+      } else {
+        newCb = cb.bind(this, item, data, arrIndex);
+      }
+
+      newCb()
         .then(function(res = null) {
           count += 1;
-          const resIndex = (batchSize * nr) + index;
           accumulator.push({
             res,
-            resIndex,
+            arrIndex,
           })
           // console.log(count, ln);
           if (count === ln) {
@@ -68,7 +75,7 @@ module.exports = function iterate(arr, batchSize, cb, data) {
                   // order by the original order
                   const resArray = new Array(arrayLength);
                   accumulator.forEach(function(i) {
-                    resArray[i.resIndex] = i.res;
+                    resArray[i.arrIndex] = i.res;
                   });
                   resolve(resArray); // All batches are done
                 }
