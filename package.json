@@ -1,6 +1,6 @@
 {
   "name": "batch-iterator",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Batch iterator using promises",
   "main": "index.js",
   "scripts": {
