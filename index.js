@@ -37,11 +37,19 @@ function batchJob(batchSize, batch, nr, accumulator, data, cb) {
 
 // Iterate an array in batches
 module.exports = function iterate(arr, batchSize, cb, data) {
-  var list = arr.slice(0, arr.length);
+  const arrayLength = arr.length;
+  var list = arr.slice(0, arrayLength);
+  if (batchSize === 0) batchSize = arrayLength;
   // Will collect everything resolved
   var result = [];
   return new Promise(function(resolve, reject) {
-    if (!arr.length) {
+    if (typeof batchSize === 'string') {
+      batchSize = parseInt(batchSize);
+    }
+
+    if (!batchSize || batchSize < 0) {
+      reject('batch-iterator: Invalid batchSize');
+    } else if (!arrayLength) {
       reject('batch-iterator: Nothing to iterate');
     } else {
       var iterations = getIterator(Math.ceil(list.length / batchSize));
@@ -58,7 +66,7 @@ module.exports = function iterate(arr, batchSize, cb, data) {
               .then(function(accumulator) {
                 if (index === iterations.length - 1) {
                   // order by the original order
-                  const resArray = new Array(arr.length);
+                  const resArray = new Array(arrayLength);
                   accumulator.forEach(function(i) {
                     resArray[i.resIndex] = i.res;
                   });

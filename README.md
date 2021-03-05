@@ -28,6 +28,8 @@ the **promise** callback.
 
 **batchSize** is how many items in the list should be started simultaneously.
 Default size is 10.
+If set to 0, all array elements are processed at once.
+If negative values are provided, 'Invalid batchSize' error is returned
 
 The **accumulator** is a list of the data resolved in each promise.
 
